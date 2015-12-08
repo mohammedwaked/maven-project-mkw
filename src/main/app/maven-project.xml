@@ -25,13 +25,16 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         </db:select>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
-%output application/json
+%output application/xml
 ---
-payload map {
-	id: $.Id,
-	origin: $.ORIGIN,
-	destination: $.DESTINATION,
-	price: $.PRICE
+{
+  flights: { (payload map {
+  	flight @(lang: $.ID): {
+      origin: $.ORIGIN,
+      destination: $.DESTINATION,
+      price: $.PRICE
+    }
+  }) }
 }]]></dw:set-payload>
         </dw:transform-message>
         <object-to-string-transformer doc:name="Object to String"/>
